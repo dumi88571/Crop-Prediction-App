@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Prediction Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2196F3;
+            --accent-color: #FFC107;
+            --background-light: #F4F4F4;
+            --text-dark: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .result-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .advanced-insights {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .advanced-insights:hover {
+            transform: scale(1.02);
+        }
+
+        .advanced-insights h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .card {
+            background-color: var(--background-light);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .card ul {
+            list-style-type: none;
+        }
+
+        .card ul li {
+            padding: 5px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .card ul li:last-child {
+            border-bottom: none;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-color);
+        }
+
+        .text-success { color: #28a745; }
+        .text-warning { color: #ffc107; }
+        .text-danger { color: #dc3545; }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+        }
+
+        .market-price-section .card {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+        }
+        .market-price-details p {
+            margin-bottom: 10px;
+        }
+        .risk-level {
+            font-weight: bold;
+        }
+        .text-muted { color: #6c757d; }
+        
+        .global-trend-section .card {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+        }
+        .global-trend-details p {
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .risk-assessment-section .card {
+            background-color: #f1f3f5;
+            border: 1px solid #dee2e6;
+        }
+        .risk-details p {
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .climate-projection-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .climate-projection-card {
+            flex: 1;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .climate-projection-card h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .climate-projection-card ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .climate-projection-card li {
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        .bg-success-subtle { background-color: rgba(25, 135, 84, 0.1); }
+        .bg-warning-subtle { background-color: rgba(255, 193, 7, 0.1); }
+        .bg-danger-subtle { background-color: rgba(220, 53, 69, 0.1); }
+
+        .disease-management-section .disease-risk-card {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .disease-management-section .risk-summary {
+            margin-bottom: 15px;
+        }
+        .disease-management-section .specific-disease-risks,
+        .disease-management-section .mitigation-strategies {
+            margin-top: 10px;
+        }
+        .disease-management-section ul {
+            padding-left: 20px;
+        }
+        .disease-management-section li {
+            margin-bottom: 5px;
+        }
+
+        .pdf-download-section {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .pdf-download-section .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        .sustainability-score-section {
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .sustainability-card {
+            display: flex;
+            gap: 20px;
+        }
+        .overall-score {
+            flex: 1;
+            text-align: center;
+        }
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto;
+            color: white;
+        }
+        .score-excellent { background-color: #28a745; }
+        .score-good { background-color: #17a2b8; }
+        .score-moderate { background-color: #ffc107; }
+        .score-poor { background-color: #dc3545; }
+        
+        .score-breakdown {
+            flex: 2;
+        }
+        .breakdown-grid {
+            display: grid;
+            gap: 10px;
+        }
+        .breakdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .breakdown-item .label {
+            flex: 1;
+            font-weight: bold;
+        }
+        .breakdown-item .progress {
+            flex: 3;
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .breakdown-item .progress-bar {
+            height: 100%;
+            background-color: #28a745;
+            transition: width 0.5s ease;
+        }
+
+        .crop-recommendations-section {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .recommendations-container {
+            display: flex;
+            gap: 15px;
+        }
+        .recommendation-card {
+            flex: 1;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            transition: transform 0.3s ease;
+        }
+        .recommendation-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .recommendation-primary {
+            border-color: #28a745;
+            background-color: #e6f3e8;
+        }
+        .recommendation-secondary {
+            border-color: #17a2b8;
+            background-color: #e6f4f7;
+        }
+        .recommendation-tertiary {
+            border-color: #ffc107;
+            background-color: #fff9e6;
+        }
+        .recommendation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .recommendation-header h4 {
+            margin: 0;
+            font-weight: bold;
+        }
+        .probability-badge {
+            background-color: #007bff;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        .recommendation-details p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .water-requirement-details {
+            margin-top: 15px;
+            background-color: rgba(0, 123, 255, 0.05);
+            border-radius: 6px;
+            padding: 10px;
+        }
+        .water-requirement-header {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .water-requirement-content {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .water-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+        .water-label {
+            color: #6c757d;
+            font-weight: 500;
+        }
+        .water-value {
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .market-price-details {
+            margin-top: 15px;
+            background-color: rgba(40, 167, 69, 0.05);
+            border-radius: 6px;
+            padding: 10px;
+        }
+        .market-price-header {
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .market-price-content {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .price-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+        .price-label {
+            color: #6c757d;
+            font-weight: 500;
+        }
+        .price-value {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .market-factors {
+            margin-top: 10px;
+            border-top: 1px solid #e9ecef;
+            padding-top: 10px;
+        }
+        .factors-label {
+            display: block;
+            color: #6c757d;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .factor-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #495057;
+        }
+        .factor-name {
+            text-transform: capitalize;
+        }
+        .factor-impact {
+            color: #17a2b8;
+            font-weight: bold;
+        }
+
+        .crop-comprehensive-details {
+            margin-top: 15px;
+            background-color: rgba(0, 123, 255, 0.03);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid rgba(0, 123, 255, 0.1);
+        }
+        .crop-details-header {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        .crop-details-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .nutrition-section, .climate-section, .economic-section, .sustainability-section {
+            background-color: white;
+            border-radius: 6px;
+            padding: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .nutrition-section h5, .climate-section h5, .economic-section h5, .sustainability-section h5 {
+            color: #007bff;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 5px;
+        }
+        .nutrition-grid, .climate-grid, .economic-grid, .sustainability-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .nutrition-item, .climate-item, .economic-item, .sustainability-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .nutrition-label, .climate-label, .economic-label, .sustainability-label {
+            color: #6c757d;
+            font-size: 0.8rem;
+            margin-bottom: 2px;
+        }
+        .nutrition-value, .climate-value, .economic-value, .sustainability-value {
+            font-weight: bold;
+            color: #495057;
+            font-size: 0.9rem;
+        }
+        .sustainability-value.sustainability-high {
+            color: #28a745;
+        }
+        .sustainability-value.sustainability-medium {
+            color: #ffc107;
+        }
+        .sustainability-value.sustainability-low {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="result-header">
+            <h1>🌱 Crop Prediction & Sustainability Analysis</h1>
+            <p>Comprehensive Agricultural Insights</p>
+        </div>
+
+        <div class="advanced-insights">
+            <h3>🌿 Crop Recommendation</h3>
+            <div class="card">
+                <p><strong>Best Crop:</strong> {{ crop }}</p>
+                <p><strong>Estimated Yield:</strong> {{ yield_per_hectare }} tonnes/hectare</p>
+                <p><strong>Market Price:</strong> ${{ market_price }}/kg</p>
+            </div>
+        </div>
+
+        <div class="crop-recommendations-section advanced-insights">
+            <h3>🌾 Top Crop Recommendations</h3>
+            {% if top_crop_recommendations %}
+            <div class="recommendations-container">
+                {% for recommendation in top_crop_recommendations %}
+                <div class="recommendation-card 
+                    {% if loop.first %}recommendation-primary
+                    {% elif loop.index == 2 %}recommendation-secondary
+                    {% else %}recommendation-tertiary
+                    {% endif %}">
+                    <div class="recommendation-header">
+                        <h4>{{ recommendation.crop|capitalize }}</h4>
+                        <span class="probability-badge">{{ recommendation.probability }}% Match</span>
+                    </div>
+                    <div class="recommendation-details">
+                        {% if recommendation.crop == 'groundnut' %}
+                        <p>Groundnut (Peanut) is a versatile legume crop with high nutritional value and economic importance.</p>
+                        {% elif recommendation.crop == 'wheat' %}
+                        <p>Wheat is a staple grain crop with global significance, suitable for various climatic conditions.</p>
+                        {% elif recommendation.crop == 'rice' %}
+                        <p>Rice is a primary food crop, especially important in Asian agricultural systems.</p>
+                        {% elif recommendation.crop == 'corn' %}
+                        <p>Corn (Maize) is a multipurpose crop used for food, feed, and industrial purposes.</p>
+                        {% else %}
+                        <p>A potential crop recommendation based on your environmental conditions.</p>
+                        {% endif %}
+                    </div>
+                    <div class="water-requirement-details">
+                        <div class="water-requirement-header">💧 Water Requirements</div>
+                        <div class="water-requirement-content">
+                            <div class="water-detail">
+                                <span class="water-label">Total Requirement:</span>
+                                <span class="water-value">{{ recommendation.water_requirement.total_water_requirement }} mm</span>
+                            </div>
+                            <div class="water-detail">
+                                <span class="water-label">Base Water:</span>
+                                <span class="water-value">{{ recommendation.water_requirement.base_water }} mm</span>
+                            </div>
+                            <div class="water-detail">
+                                <span class="water-label">Water Use Efficiency:</span>
+                                <span class="water-value">{{ recommendation.water_requirement.water_use_efficiency }}%</span>
+                            </div>
+                            <div class="water-detail">
+                                <span class="water-label">Critical Stages:</span>
+                                <span class="water-value">{{ recommendation.water_requirement.critical_stages|join(', ') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="market-price-details">
+                        <div class="market-price-header">💰 Market Price</div>
+                        <div class="market-price-content">
+                            <div class="price-detail">
+                                <span class="price-label">Base Price:</span>
+                                <span class="price-value">$ {{ recommendation.market_price.base_price_usd_per_kg }}/kg</span>
+                            </div>
+                            <div class="price-detail">
+                                <span class="price-label">Current Market Price:</span>
+                                <span class="price-value">$ {{ recommendation.market_price.final_price_usd_per_kg }}/kg</span>
+                            </div>
+                            <div class="price-detail">
+                                <span class="price-label">Price Volatility:</span>
+                                <span class="price-value">{{ recommendation.market_price.price_volatility }}%</span>
+                            </div>
+                            <div class="market-factors">
+                                <span class="factors-label">Market Factors:</span>
+                                {% for factor, impact in recommendation.market_price.market_factors.items() %}
+                                <div class="factor-detail">
+                                    <span class="factor-name">{{ factor|replace('_', ' ')|title }}:</span>
+                                    <span class="factor-impact">{{ impact }}%</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crop-comprehensive-details">
+                        <div class="crop-details-header">🌱 Crop Insights</div>
+                        <div class="crop-details-content">
+                            <div class="nutrition-section">
+                                <h5>Nutritional Profile</h5>
+                                <div class="nutrition-grid">
+                                    <div class="nutrition-item">
+                                        <span class="nutrition-label">Protein</span>
+                                        <span class="nutrition-value">{{ recommendation.crop_details.nutritional_profile.protein }}</span>
+                                    </div>
+                                    <div class="nutrition-item">
+                                        <span class="nutrition-label">Carbohydrates</span>
+                                        <span class="nutrition-value">{{ recommendation.crop_details.nutritional_profile.carbohydrates }}</span>
+                                    </div>
+                                    <div class="nutrition-item">
+                                        <span class="nutrition-label">Fiber</span>
+                                        <span class="nutrition-value">{{ recommendation.crop_details.nutritional_profile.fiber }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="climate-section">
+                                <h5>Climate Suitability</h5>
+                                <div class="climate-grid">
+                                    <div class="climate-item">
+                                        <span class="climate-label">Temperature</span>
+                                        <span class="climate-value">{{ recommendation.crop_details.climate_suitability.temperature_range }}</span>
+                                    </div>
+                                    <div class="climate-item">
+                                        <span class="climate-label">Rainfall</span>
+                                        <span class="climate-value">{{ recommendation.crop_details.climate_suitability.rainfall_requirement }}</span>
+                                    </div>
+                                    <div class="climate-item">
+                                        <span class="climate-label">Growing Period</span>
+                                        <span class="climate-value">{{ recommendation.crop_details.climate_suitability.growing_period }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="economic-section">
+                                <h5>Economic Value</h5>
+                                <div class="economic-grid">
+                                    <div class="economic-item">
+                                        <span class="economic-label">Global Production</span>
+                                        <span class="economic-value">{{ recommendation.crop_details.economic_value.global_production }}</span>
+                                    </div>
+                                    <div class="economic-item">
+                                        <span class="economic-label">Top Producers</span>
+                                        <span class="economic-value">{{ recommendation.crop_details.economic_value.top_producers|join(', ') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="sustainability-section">
+                                <h5>Sustainability Metrics</h5>
+                                <div class="sustainability-grid">
+                                    <div class="sustainability-item">
+                                        <span class="sustainability-label">Sustainability Score</span>
+                                        <span class="sustainability-value 
+                                            {% if recommendation.crop_details.sustainability_score >= 0.8 %}sustainability-high
+                                            {% elif recommendation.crop_details.sustainability_score >= 0.6 %}sustainability-medium
+                                            {% else %}sustainability-low
+                                            {% endif %}
+                                        ">
+                                            {{ (recommendation.crop_details.sustainability_score * 100)|round(0) }}%
+                                        </span>
+                                    </div>
+                                    <div class="sustainability-item">
+                                        <span class="sustainability-label">Carbon Sequestration</span>
+                                        <span class="sustainability-value">{{ recommendation.crop_details.carbon_sequestration }}</span>
+                                    </div>
+                                    <div class="sustainability-item">
+                                        <span class="sustainability-label">Soil Health Impact</span>
+                                        <span class="sustainability-value">{{ recommendation.crop_details.soil_health_impact }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-muted">No crop recommendations available</p>
+            {% endif %}
+        </div>
+
+        <div class="advanced-insights">
+            <h3>🌱 Environmental Conditions</h3>
+            <div class="card">
+                <p><strong>Rainfall:</strong> {{ rainfall }} mm</p>
+                <p><strong>Temperature:</strong> {{ temperature }}°C</p>
+                <p><strong>Humidity:</strong> {{ humidity }}%</p>
+                <p><strong>Water Requirement:</strong> {{ water_requirement }} mm/season</p>
+            </div>
+        </div>
+
+        <div class="advanced-insights">
+            <h3>🌿 Sustainability Breakdown</h3>
+            <div class="card">
+                <p>Our sustainability score considers five key environmental factors:</p>
+                <ul>
+                    <li>🌍 Carbon Sequestration: Crop's ability to capture and store carbon dioxide</li>
+                    <li>🦋 Biodiversity Impact: Effect on local ecosystem diversity</li>
+                    <li>💧 Water Efficiency: Water consumption and irrigation needs</li>
+                    <li>🌱 Soil Health: Impact on soil quality and nutrient retention</li>
+                    <li>🌿 Organic Potential: Compatibility with sustainable farming practices</li>
+                </ul>
+            </div>
+        </div>
+
+        {% if region_crops %}
+        <div class="advanced-insights">
+            <h3>🌱 Country-Specific Crop Suggestions</h3>
+            <div class="card">
+                <p>Other recommended crops for your region:</p>
+                <ul>
+                    {% for regional_crop in region_crops %}
+                    <li>{{ regional_crop.capitalize() }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="advanced-insights risk-assessment-section">
+            <h3>🛡️ Risk Assessment</h3>
+            <div class="card">
+                {% if risk_assessment %}
+                <div class="risk-details">
+                    <p>
+                        <strong>Overall Risk Level:</strong> 
+                        <span class="
+                            {% if risk_assessment.risk_level == 'Low' %}text-success
+                            {% elif risk_assessment.risk_level == 'Medium' %}text-warning
+                            {% else %}text-danger
+                            {% endif %}
+                        ">
+                            {{ risk_assessment.risk_level }}
+                        </span>
+                    </p>
+                    <p>
+                        <strong>Risk Score:</strong> 
+                        {{ risk_assessment.risk_score }}/10
+                    </p>
+                    <p>
+                        <strong>Global Trend Impact:</strong> 
+                        {{ risk_assessment.global_trend_impact }}%
+                    </p>
+                </div>
+                {% else %}
+                <p class="text-muted">Risk assessment unavailable</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="advanced-insights market-price-section">
+            <h3>💰 Market Price Forecast</h3>
+            <div class="card">
+                {% if market_price_insights %}
+                <div class="market-price-details">
+                    <p>
+                        <strong>Predicted Price:</strong> 
+                        ${{ market_price_insights.get('predicted_price', 'N/A') }}/ton
+                    </p>
+                    <p>
+                        <strong>Seasonal Trend:</strong> 
+                        {{ market_price_insights.get('seasonal_trend', 'Not Available') }}
+                    </p>
+                    <p>
+                        <strong>Market Risk:</strong> 
+                        <span class="risk-level 
+                            {% if market_price_insights.get('risk_level', '') == 'Low' %}text-success
+                            {% elif market_price_insights.get('risk_level', '') == 'Medium' %}text-warning
+                            {% else %}text-danger
+                            {% endif %}
+                        ">
+                            {{ market_price_insights.get('risk_level', 'Not Assessed') }}
+                        </span>
+                    </p>
+                    <p>
+                        <strong>Risk Score:</strong> 
+                        {{ market_price_insights.get('risk_score', 'N/A') }}/10
+                    </p>
+                </div>
+                {% else %}
+                <p class="text-muted">Market price insights currently unavailable</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="advanced-insights global-trend-section">
+            <h3>🌍 Global Market Trends</h3>
+            <div class="card">
+                {% if market_price_insights and market_price_insights.get('key_global_factors') %}
+                <div class="global-trend-details">
+                    <p>
+                        <strong>Future Price Projection:</strong> 
+                        ${{ market_price_insights.get('future_price_projection', 'N/A') }}/ton
+                    </p>
+                    <p>
+                        <strong>Global Trend Impact:</strong> 
+                        {{ market_price_insights.get('global_trend_impact', 'N/A') }}%
+                    </p>
+                    <p>
+                        <strong>Key Global Factors:</strong> 
+                        {{ market_price_insights.get('key_global_factors', [])|join(', ') }}
+                    </p>
+                </div>
+                {% else %}
+                <p class="text-muted">Global market trend insights unavailable</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="advanced-insights disease-management-section">
+            <h3>🦠 Disease Risk Management</h3>
+            {% if disease_assessment %}
+            <div class="disease-risk-card">
+                <div class="risk-summary">
+                    <p>
+                        <strong>Total Disease Risk Score:</strong> 
+                        <span class="
+                            {% if disease_assessment.total_risk_score < 0.2 %}text-success
+                            {% elif disease_assessment.total_risk_score < 0.5 %}text-warning
+                            {% else %}text-danger
+                            {% endif %}
+                        ">
+                            {{ (disease_assessment.total_risk_score * 100)|round|int }}%
+                        </span>
+                    </p>
+                </div>
+
+                {% if disease_assessment.disease_risks %}
+                <div class="specific-disease-risks">
+                    <h4>Specific Disease Risks</h4>
+                    <ul>
+                        {% for disease, risk in disease_assessment.disease_risks.items() %}
+                        <li>
+                            <strong>{{ disease }}:</strong> 
+                            <span class="
+                                {% if risk < 0.2 %}text-success
+                                {% elif risk < 0.5 %}text-warning
+                                {% else %}text-danger
+                                {% endif %}
+                            ">
+                                {{ (risk * 100)|round|int }}% Risk
+                            </span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                {% if disease_assessment.recommended_actions %}
+                <div class="mitigation-strategies">
+                    <h4>Recommended Actions</h4>
+                    <ul>
+                        {% for action in disease_assessment.recommended_actions %}
+                        <li>{{ action }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+            {% else %}
+            <p class="text-muted">Disease risk assessment unavailable</p>
+            {% endif %}
+        </div>
+
+        <div class="advanced-insights">
+            <h3>🌍 Climate Change Impact Projection</h3>
+            {% if climate_projection is defined and climate_projection %}
+                <div class="climate-projection-grid">
+                    {% for scenario, projection in climate_projection.items() %}
+                    <div class="climate-projection-card 
+                        {% if scenario == 'Optimistic' %}bg-success-subtle
+                        {% elif scenario == 'Moderate' %}bg-warning-subtle
+                        {% else %}bg-danger-subtle
+                        {% endif %}">
+                        <h4>{{ scenario }} Scenario</h4>
+                        <ul>
+                            <li><strong>Yield Impact:</strong> {{ projection.get('yield_impact', 'N/A') }}</li>
+                            <li><strong>Temperature Change:</strong> {{ projection.get('temperature_change', 'N/A') }}</li>
+                            <li><strong>Water Availability:</strong> {{ projection.get('water_availability', 'N/A') }}</li>
+                        </ul>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">Climate projection data unavailable</p>
+            {% endif %}
+        </div>
+
+        <div class="advanced-insights sustainability-score-section">
+            <h3>🌱 Sustainability Score</h3>
+            {% if sustainability_score %}
+            <div class="sustainability-card">
+                <div class="overall-score">
+                    <h4>Overall Sustainability Score</h4>
+                    <div class="score-circle 
+                        {% if sustainability_score.overall_score >= 80 %}score-excellent
+                        {% elif sustainability_score.overall_score >= 60 %}score-good
+                        {% elif sustainability_score.overall_score >= 40 %}score-moderate
+                        {% else %}score-poor
+                        {% endif %}
+                    ">
+                        {{ sustainability_score.overall_score }}%
+                    </div>
+                </div>
+                
+                <div class="score-breakdown">
+                    <h4>Score Breakdown</h4>
+                    <div class="breakdown-grid">
+                        <div class="breakdown-item">
+                            <span class="label">Water Efficiency</span>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: {{ sustainability_score.factors.water_efficiency }}%;">
+                                    {{ sustainability_score.factors.water_efficiency|round(1) }}%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="label">Soil Health</span>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: {{ sustainability_score.factors.soil_health }}%;">
+                                    {{ sustainability_score.factors.soil_health|round(1) }}%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="label">Climate Resilience</span>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: {{ sustainability_score.factors.climate_resilience }}%;">
+                                    {{ sustainability_score.factors.climate_resilience|round(1) }}%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="label">Disease Resistance</span>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: {{ sustainability_score.factors.disease_resistance }}%;">
+                                    {{ sustainability_score.factors.disease_resistance|round(1) }}%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="label">Yield Potential</span>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: {{ sustainability_score.factors.yield_potential }}%;">
+                                    {{ sustainability_score.factors.yield_potential|round(1) }}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <p class="text-muted">Sustainability score unavailable</p>
+            {% endif %}
+        </div>
+
+        <div class="pdf-download-section text-center my-4">
+            <form action="{{ url_for('download_report') }}" method="post">
+                <input type="hidden" name="crop" value="{{ crop }}">
+                <input type="hidden" name="yield_per_hectare" value="{{ yield_per_hectare }}">
+                <input type="hidden" name="market_price" value="{{ market_price }}">
+                
+                <!-- Risk and Sustainability Inputs -->
+                <input type="hidden" name="total_risk_score" value="{{ risk_assessment.risk_score if risk_assessment else 5 }}">
+                <input type="hidden" name="sustainability_score" value="{{ sustainability_score if sustainability_score else 50 }}">
+                <input type="hidden" name="sustainability_breakdown" value="{{ sustainability_score.breakdown if sustainability_score and sustainability_score.breakdown else 'No detailed breakdown available' }}">
+                
+                <!-- Disease Risks Input -->
+                <input type="hidden" name="disease_risks" value="{{ disease_risks_json }}">
+                
+                <!-- Mitigation Strategies Input -->
+                <input type="hidden" name="mitigation_strategies" value="1. Implement crop rotation
+2. Use disease-resistant crop varieties
+3. Maintain proper soil nutrition
+4. Monitor and control irrigation
+5. Optimize water management
+6. Practice integrated pest management">
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-file-pdf"></i> Download Comprehensive Report
+                </button>
+            </form>
+        </div>
+
+        <div class="advanced-insights" style="text-align: center;">
+            <form action="/export_pdf" method="post">
+                <input type="hidden" name="pdf_path" value="{{ pdf_path }}">
+                <button type="submit" class="btn">Download Detailed Report (PDF)</button>
+            </form>
+            <a href="/" class="btn" style="margin-left: 10px;">Back to Prediction</a>
+        </div>
+    </div>
+</body>
+</html>
