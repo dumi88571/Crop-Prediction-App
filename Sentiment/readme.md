@@ -26,9 +26,11 @@ The tool leverages natural language processing (NLP) techniques to provide quick
 ## View sentiment results in the console or integrate with your own data pipeline.
 
 ## Applications
-Financial news analysis
-Market sentiment tracking
-Investment decision support
+-Financial news analysis
+
+-Market sentiment tracking
+
+-Investment decision support
 
 
 
